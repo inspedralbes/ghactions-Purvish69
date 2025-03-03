@@ -19,7 +19,7 @@
 
 # subir a produccio
 name: Preparant per producció
-run-name: ${{ github.actor }} està pujant l'aplicació a PROD 🚀
+run-name: ${{ github.actor }} està pujant l'aplicació a PROD  🚀
 on: [push]
 jobs:
   Pujar-a-produccio-amb-SCP:
@@ -28,18 +28,13 @@ jobs:
       - name: Obtenint el codi del respositori
         uses: actions/checkout@v4
 
-      - name: Depuración de secretos
-        run: |
-          echo "SSH_USER: ${{ secrets.SSH_USER }}"
-          echo "SSH_HOST: ${{ secrets.SSH_HOST }}"
-
       - name: scp a produccio
         run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/prod_key.pem
+          echo "${{ secrets.PROD_KEY }}" > ~/prod_key.pem
           chmod 600 ~/prod_key.pem
           cd ${{ github.workspace }}
           echo "Action desplegant a produccio" > ./web/last_deploy.txt
           date >> ./web/last_deploy.txt
-          scp -r -o stricthostkeychecking=no -o UserKnownHostsFile=/dev/null -i "~/prod_key.pem" ./web/* ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/a23purpatmah/web/actions.daw.inspedralbes.cat/public_html/
-
+          scp -r -o stricthostkeychecking=no -o UserKnownHostsFile=/dev/null -i "~/prod_key.pem" ./web/* ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }}:/home/a23purpatmah/web/actions.daw.inspedralbes.cat/public_html/
+          
       - run: echo "🍏 This job's status is ${{ job.status }}."
