@@ -36,7 +36,7 @@ jobs:
           echo "Action desplegant a produccio" > ./web/last_deploy.txt
           date >> ./web/last_deploy.txt
 
-          echo FARE scp -r -o stricthostkeychecking=no -o UserKnownHostsFile=/dev/null -i "~/prod_key.pem" ./web/* ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/a23purpubmah/web/daw.inspedralbes.cat/public_html/GithubActions/
-          scp -r -o stricthostkeychecking=no -o UserKnownHostsFile=/dev/null -i "~/prod_key.pem" ./web/* ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/a23purpubmah/web/daw.inspedralbes.cat/public_html/GithubActions/
+          echo FARE scp -r -o stricthostkeychecking=no -o UserKnownHostsFile=/dev/null -i "~/prod_key.pem" ./web/* ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/a23purpubmah/web/a23purpatmah.daw.inspedralbes.cat/public_html/GithubActions/
+          scp -r -o stricthostkeychecking=no -o UserKnownHostsFile=/dev/null -i "~/prod_key.pem" ./web/* ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/a23purpubmah/web/a23purpatmah.daw.inspedralbes.cat/public_html/GithubActions/
           
       - run: echo "🍏 This job's status is ${{ job.status }}."
