@@ -44,7 +44,7 @@ jobs:
 
       - name: Desplegar amb SCP a producció
         run: |
-          scp -r -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ~/prod_key.pem ./web/* ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/a23purpubmah/web/a23purpatmah.daw.inspedralbes.cat/public_html/GithubActions/
+          scp -r -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ~/prod_key.pem ./web/* ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/a23purpubmah/web/daw.inspedralbes.cat/public_html/GithubActions/
 
       - name: Mostrar estat del job
         run: echo "🍏 This job's status is ${{ job.status }}."
