@@ -1,24 +1,4 @@
-# name: GitHub Actions Demo
-# run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
-# on: [push]
-# jobs:
-#   Explore-GitHub-Actions:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-#       - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-#       - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-#       - name: Check out repository code
-#         uses: actions/checkout@v4
-#       - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-#       - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-#       - name: List files in the repository
-#         run: |
-#           ls ${{ github.workspace }}
-#       - run: echo "🍏 This job's status is ${{ job.status }}."
-
-# subir a produccio
-name: Preparant per producció
+name: Preparant per producció vue.js
 run-name: ${{ github.actor }} està pujant l'aplicació a PROD 🚀
 on: [push]
 
@@ -29,22 +9,27 @@ jobs:
       - name: Obtenir el codi del repositori
         uses: actions/checkout@v4
 
-      - name: Crear clau SSH a partir del secret
-        run: |
-          # Crea el fitxer amb la clau privada en format OpenSSH
-          printf "%s" "${{ secrets.SSH_PRIVATE_KEY }}" > ~/prod_key.pem
-          chmod 600 ~/prod_key.pem
+      - name: Configura Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22
 
-      - name: Actualitzar fitxers per al desplegament
+      - name: ubicacio
+        run: pwd
+      - name: Instal·lar dependències
+        run: npm ci
+      - name: Construir l'aplicació Vue.js
+        run: npm run build
+
+      - name: Configurant SSH i comprovant connexió
         run: |
-          cd ${{ github.workspace }}
-          # Actualitza o crea un fitxer per marcar l'últim desplegament
-          echo "Action desplegant a producció" > ./web/last_deploy.txt
-          date >> ./web/last_deploy.txt
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/prod_key.pem
+          chmod 600 ~/prod_key.pem
+          ssh -i ~/prod_key.pem -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "echo 'Conexión SSH exitosa'"
 
       - name: Desplegar amb SCP a producció
         run: |
-          scp -r -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ~/prod_key.pem ./web/* ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/a23purpatmah/web/a23purpatmah.daw.inspedralbes.cat/public_html/GithubActions/
+          scp -r -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ~/prod_key.pem ./dist/* ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/a23purpatmah/web/a23purpatmah.daw.inspedralbes.cat/public_html/GithubActions/calculadora
 
       - name: Mostrar estat del job
         run: echo "🍏 This job's status is ${{ job.status }}."
